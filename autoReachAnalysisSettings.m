@@ -14,7 +14,7 @@ settings.saveZoneData=1; % if 1, save zone data extracted from movie
 settings.discardFirstNFrames=discardFirstNFrames; % number of frames to discard at beginning of movie
 
 % For getReaches.m
-settings.reach.userDefinedThresh=0; % set to 1 if want user to manually define threshold for reach, instead of automated method
+settings.reach.userDefinedThresh=1; % set to 1 if want user to manually define threshold for reach, instead of automated method
 settings.reach.maxReachFrequency=6; % in Hz, the maximum frequency at which mouse can reach
 settings.reach.reachThresh=5; % after non-parametric Z score transformation of reachData, threshold for determining mouse reach
 settings.reach.holdThreshold=5; % in seconds -- if any reach lasts longer than 10 s, this is not a reach -- this is a hold
@@ -37,7 +37,7 @@ settings.pellet.plotOutput=1; % if 1, plot output, else do not plot
 settings.chew.added_path='/Users/kim/Documents/MATLAB/chronux_2_11'; % path to Chronux
 % settings.chew.chewFrequency=[4 6]; % frequency range at which mouse chews in Hz
 settings.chew.chewFrequency=[5.5 7.7]; % frequency range at which mouse chews in Hz
-settings.chew.chewingThresh=1; % in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
+settings.chew.chewingThresh=1.00; % in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
 % settings.chew.chewingThresh=0.9; % for lick expt: in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
 % settings.chew.tapers=[10 12]; % Chronux mtspecgramc tapers to use for identifying chewing at chewFrequency
 settings.chew.tapers=[5 7]; % Chronux mtspecgramc tapers to use for identifying chewing at chewFrequency

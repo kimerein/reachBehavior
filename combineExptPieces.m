@@ -12,7 +12,7 @@ for i=1:length(tryForFiles)
 end
 
 % Check for text file "humanchecked"
-check_for_human=1; % if this is 1
+check_for_human=0; % if this is 1
 
 % Convert consecutive reaches to reach batches
 convert_to_batches=1; % if this is 1
@@ -34,7 +34,8 @@ for i=1:length(ls)
     if ~isempty(regexp(thisname,'processed_data')) && thisisdir==1
         
         if check_for_human==1
-            if exist([expt_dir '\' thisname '\humanchecked_afterResampleFix.txt'], 'file')==2
+%             if exist([expt_dir '\' thisname '\humanchecked_afterResampleFix.txt'], 'file')==2
+            if exist([expt_dir '\' thisname '\humanchecked.txt'], 'file')==2 | exist([expt_dir '\' thisname '\humanchecked_afterResampleFix.txt'], 'file')==2
             else
                 disp(['Not including ' expt_dir '\' thisname]);
                 continue

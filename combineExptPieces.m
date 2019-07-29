@@ -6,7 +6,7 @@ function [alltbt,allmetadata]=combineExptPieces(expt_dir,useAsCue,cueDuration,do
 tryForFields={'pelletPresent'};
 
 % Also read in data from these files if they exist
-tryForFiles={'optoOnHere', 'nth_session','optoThresh'};
+tryForFiles={'optoOnHere', 'nth_session','optoThresh','preemptCue'};
 for i=1:length(tryForFiles)
     tryFilesOut.(tryForFiles{i})=[];
 end
@@ -65,6 +65,11 @@ for i=1:length(ls)
                 tryFilesOut.(currTryFile)=temp;
             end
         end
+        
+        if tryFilesOut.preemptCue==true
+            continue
+        end
+        
         
         if l==1
             k=k+1;

@@ -4,37 +4,65 @@ function settings=autoReachAnalysisSettings(varargin)
 
 persistent discardFirstNFrames
 
+doManual=false;
+chronPath=[];
+
 if ~isempty(varargin)
     discardFirstNFrames=varargin{1}; % number of frames to discard at beginning of movie
+    if length(varargin)>1
+        doManual=varargin{2};
+        if length(varargin)>2
+            chronPath=varargin{3};
+        end
+    end
 end
 
 % For all
 settings.movie_fps=30; % movie frame rate in frames per second
 settings.saveZoneData=1; % if 1, save zone data extracted from movie
 settings.discardFirstNFrames=discardFirstNFrames; % number of frames to discard at beginning of movie
+settings.isOrchestra=0; % if running this code on Harvard O2 server, set this to 1, else 0
 
 % For getReaches.m
+settings.reach.userDefinedThresh=1; % set to 1 if want user to manually define threshold for reach, instead of automated method
+if doManual==true
+    settings.reach.userDefinedThresh=1; 
+end
 settings.reach.maxReachFrequency=6; % in Hz, the maximum frequency at which mouse can reach
 settings.reach.reachThresh=5; % after non-parametric Z score transformation of reachData, threshold for determining mouse reach
 settings.reach.holdThreshold=5; % in seconds -- if any reach lasts longer than 10 s, this is not a reach -- this is a hold
 settings.reach.plotOutput=1; % if 1, plot output of reach analysis, else do not plot
 
 % For getLicks.m
-settings.reach.maxReachFrequency=20; % in Hz, the maximum frequency at which mouse can reach
-settings.reach.reachThresh=5; % after non-parametric Z score transformation of reachData, threshold for determining mouse reach
-settings.reach.holdThreshold=5; % in seconds -- if any reach lasts longer than 10 s, this is not a reach -- this is a hold
-settings.reach.plotOutput=1; % if 1, plot output of reach analysis, else do not plot
+settings.lick.maxReachFrequency=20; % in Hz, the maximum frequency at which mouse can reach
+settings.lick.reachThresh=1; % after non-parametric Z score transformation of reachData, threshold for determining mouse reach
+settings.lick.holdThreshold=5; % in seconds -- if any reach lasts longer than 10 s, this is not a reach -- this is a hold
+settings.lick.plotOutput=1; % if 1, plot output of reach analysis, else do not plot
 
 % For getPelletInPlace.m
-settings.pellet.nScaledMAD=3; % how many scaled median absolute deviations away from median for data point to be called an outlier
+settings.pellet.userDefinedThresh=1; % set to 1 if want user to manually define threshold for pellet present, instead of automated method
+if doManual==true
+    settings.pellet.userDefinedThresh=1;
+end
+settings.pellet.subtractReachZone=0; % set to 1 if mouse tends to leave paw on wheel in pellet zone
+% settings.pellet.nScaledMAD=3; % how many scaled median absolute deviations away from median for data point to be called an outlier
+settings.pellet.nScaledMAD=1.75; % how many scaled median absolute deviations away from median for data point to be called an outlier
 settings.pellet.plotOutput=1; % if 1, plot output, else do not plot
 
 % For getChewing.m
-settings.chew.added_path='/Users/kim/Documents/MATLAB/chronux_2_11'; % path to Chronux
+settings.chew.added_path='C:/Users/kim/Documents/MATLAB/chronux_2_11'; % path to Chronux
+if ~isempty(chronPath)
+    settings.chew.added_path=chronPath;
+end
 % settings.chew.chewFrequency=[4 6]; % frequency range at which mouse chews in Hz
 settings.chew.chewFrequency=[5.5 7.7]; % frequency range at which mouse chews in Hz
+<<<<<<< HEAD
 % settings.chew.chewingThresh=5; % in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
 settings.chew.chewingThresh=1.5; % for lick expt: in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
+=======
+settings.chew.chewingThresh=1; % in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
+% settings.chew.chewingThresh=0.9; % for lick expt: in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
+>>>>>>> origin/master
 % settings.chew.tapers=[10 12]; % Chronux mtspecgramc tapers to use for identifying chewing at chewFrequency
 settings.chew.tapers=[5 7]; % Chronux mtspecgramc tapers to use for identifying chewing at chewFrequency
 settings.chew.fpass=[2 15]; % in Hz, the range for Chronux mtspecgramc
@@ -45,6 +73,12 @@ settings.chew.chewingWindow=[5 0.25]; % in seconds, first element: window for Ch
 settings.chew.plotOutput=1; % if 1, plot output, else do not plot
 settings.chew.minTimeToChewPellet=6; % in seconds, the minimum time it takes mouse to eat pellet (e.g., vs chewing Ensure)
 settings.chew.withinXSeconds=20; % must be at least minTimeToChewPellet seconds of chewing withinXSeconds for bout to be classified as chewing pellet
+settings.chew.dropIfChewingBefore=1; % if 1, will classify a reach as a drop, instead of a success, 
+% if mouse was chewing prior to reach (i.e., still consuming previous pellet) within priorToReach_chewWindow seconds
+% AND chew time following reach is less than minTimeToChew_afterReach
+settings.chew.minTimeToChew_afterReach=18; % in seconds, a more stringent criterion for pellet consumption time, to disambiguate 
+% continued chewing of previous pellet after failed reach from successful reach
+settings.chew.priorToReach_chewWindow=4; % in seconds, window prior to reach to check for chewing
                                   
 % Check whether chewing is actually grooming?
 settings.checkForGrooming=0; % 1 if want user to do this check, 0 otherwise

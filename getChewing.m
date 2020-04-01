@@ -36,14 +36,16 @@ out.chewingpower=chewingpower;
 rmpath(genpath(added_path));
 
 if plotOutput==1
-   figure(); 
+   f(1)=figure(); 
    plot(settings.discardFirstNFrames:settings.discardFirstNFrames+length(out.chewingInFrames)-1,out.chewingInFrames,'Color','k');
    hold on;
    line([settings.discardFirstNFrames settings.discardFirstNFrames+length(out.chewingInFrames)-1],[chewingThresh chewingThresh],'Color','r');
    title('Threshold for chewing classification');
-   pause;
+   if settings.isOrchestra~=1
+       pause;
+   end
     
-   figure();
+   f(2)=figure();
    plot(eatData,'Color','k');
    temp=zeros(size(eatData));
    temp(isnan(eatData))=nan;
@@ -59,6 +61,10 @@ if plotOutput==1
    leg={'eat zone intensity','is chewing','chewing power'};
    title('Chewing Classification');
    legend(leg);
+   if settings.isOrchestra==1
+       out.fig1=f(1);
+       out.fig2=f(2);
+   end
 end
 
 end

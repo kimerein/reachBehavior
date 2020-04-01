@@ -39,7 +39,7 @@ for i=1:length(reaches.reachBegins)
 end
 
 savehandles.LEDvals=zoneVals.LEDZone;
-% Take these fields from zoneVals for alignment
+% Take these fields from zoneVals or other input structures for alignment
 alignSet=alignmentSettings();
 for i=1:length(alignSet.alignField)
     if alignSet.alignField(i).fromarduino==0
@@ -48,6 +48,10 @@ for i=1:length(alignSet.alignField)
             savehandles.(alignSet.alignField(i).name)=zoneVals.(alignSet.alignField(i).name);
         elseif isfield(eat,alignSet.alignField(i).name)
             savehandles.(alignSet.alignField(i).name)=eat.(alignSet.alignField(i).name);
+        elseif isfield(reaches,alignSet.alignField(i).name)
+            savehandles.(alignSet.alignField(i).name)=reaches.(alignSet.alignField(i).name);
+        elseif isfield(pellets,alignSet.alignField(i).name)
+            savehandles.(alignSet.alignField(i).name)=pellets.(alignSet.alignField(i).name);
         else
             disp(['Do not recognize source of field ' alignSet.alignField(i).name]);
         end

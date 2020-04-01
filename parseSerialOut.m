@@ -139,6 +139,8 @@ while cline~=-1
             eventLogTimes=[eventLogTimes eventTime];
             if strcmp(eventInfo,'S')
                 optoStart=[optoStart 1];
+            elseif strcmp(eventInfo,'SF') % for buggy code on old rig
+                optoStart=[optoStart 1];
             elseif strcmp(eventInfo,'E')
                 optoStart=[optoStart 0];
             else

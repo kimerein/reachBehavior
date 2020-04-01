@@ -35,6 +35,9 @@ end
 reaches=getReaches(zoneVals.reachZone);
 
 % Get pellet data
+if settings.pellet.subtractReachZone==1
+    zoneVals=subtractReachFromPelletZones(zoneVals);
+end
 pellets=getPelletInPlace(zoneVals.pelletZone);
 
 % Get chewing data
@@ -64,6 +67,22 @@ end
 [~,out]=codeEvents(reaches,pellets,eat,paw,fidget); 
 
 % Save output
+if settings.isOrchestra==1
+    % save figures
+    endoffname=regexp(movieFile,'\.');
+    savefig(reaches.fig,[movieFile(1:endoffname(end)-1) '_reachesFig.fig'],'compact');
+    savefig(pellets.fig,[movieFile(1:endoffname(end)-1) '_pelletsFig.fig'],'compact');
+    savefig(eat.fig1,[movieFile(1:endoffname(end)-1) '_eatFig1.fig'],'compact');
+    savefig(eat.fig2,[movieFile(1:endoffname(end)-1) '_eatFig2.fig'],'compact');
+    savefig(paw.fig,[movieFile(1:endoffname(end)-1) '_pawFig.fig'],'compact');
+    savefig(fidget.fig,[movieFile(1:endoffname(end)-1) '_fidgetFig.fig'],'compact');   
+    close all
+    reaches.fig=[];
+    pellets.fig=[];
+    eat.fig=[];
+    paw.fig=[];
+    fidget.fig=[];
+end
 if settings.saveZoneData==1
     endoffname=regexp(movieFile,'\.');
     save([movieFile(1:endoffname(end)-1) '_events.mat'],'out');
@@ -73,5 +92,30 @@ if settings.saveZoneData==1
     save([movieFile(1:endoffname(end)-1) '_paw.mat'],'paw');
     save([movieFile(1:endoffname(end)-1) '_fidget.mat'],'fidget');
 end
+
+end
+
+function zoneVals=subtractReachFromPelletZones(zoneVals)
+
+zoneVals.pelletZone=zoneVals.pelletZone-prctile(zoneVals.pelletZone,5);
+zoneVals.pelletZone=zoneVals.pelletZone./prctile(zoneVals.pelletZone,95);
+zoneVals.reachZone=zoneVals.reachZone-prctile(zoneVals.reachZone,5);
+zoneVals.reachZone=zoneVals.reachZone./prctile(zoneVals.reachZone,95);
+backup=zoneVals.pelletZone;
+figure();
+plot(zoneVals.pelletZone,'Color','b');
+hold on;
+plot(zoneVals.reachZone,'Color','r');
+zoneVals.pelletZone=zoneVals.pelletZone-zoneVals.reachZone;
+zoneVals.pelletZone=zoneVals.pelletZone-prctile(zoneVals.pelletZone,5);
+zoneVals.pelletZone=zoneVals.pelletZone./prctile(zoneVals.pelletZone,95);
+plot(zoneVals.pelletZone,'Color','k');
+leg={'pellet zone','reach zone','subtraction'};
+title('Subtracting reach zone from pellet zone');
+legend(leg);
+
+figure(); 
+plot(zoneVals.pelletZone,'Color','k');
+title('Subtracting reach zone from pellet zone');
 
 end

@@ -33,7 +33,7 @@ out.raisePeaks=raisePeaks;
 out.currRaiseWidth=currRaiseWidth;
 
 if plotOutput==1
-   figure(); 
+   f=figure(); 
    plot(eatZoneData);
    hold on;
    plot(out.isPawAtMouth.*max(eatZoneData),'Color','r');
@@ -41,4 +41,7 @@ if plotOutput==1
    leg={'z-scored eat zone intensity','paw at mouth','peak time of paw at mouth'};
    title('Paw At Mouth Classification');
    legend(leg);
+   if settings.isOrchestra==1
+       out.fig=f;
+   end
 end

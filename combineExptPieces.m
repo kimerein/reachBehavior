@@ -6,13 +6,13 @@ function [alltbt,allmetadata]=combineExptPieces(expt_dir,useAsCue,cueDuration,do
 tryForFields={'pelletPresent'};
 
 % Also read in data from these files if they exist
-tryForFiles={'optoOnHere', 'nth_session','optoThresh','preemptCue'};
+tryForFiles={'optoOnHere','nth_session','optoThresh','preemptCue'};
 for i=1:length(tryForFiles)
     tryFilesOut.(tryForFiles{i})=[];
 end
 
 % Check for text file "humanchecked"
-check_for_human=0; % if this is 1
+check_for_human=1; % if this is 1
 
 % Convert consecutive reaches to reach batches
 convert_to_batches=1; % if this is 1
@@ -42,11 +42,17 @@ for i=1:length(ls)
             end
         end
         
+        disp(thisname);
+        
 %         a=load([expt_dir '\' thisname '\tbt_resampled.mat']);
         a=load([expt_dir '\' thisname '\tbt.mat']);
         tbt{j}=a.tbt;
         if exist([expt_dir '\' thisname '\mouse_id.mat'], 'file')==2
             a=load([expt_dir '\' thisname '\mouse_id.mat']);
+            if isempty(a.mouse_id)
+                disp(['Not including ' expt_dir '\' thisname]);
+                continue 
+            end
             mouseid(j)=a.mouse_id;
         else
             mouseid(j)=nan;

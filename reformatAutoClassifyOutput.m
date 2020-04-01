@@ -79,11 +79,7 @@ function data=addNFramestoData(data, n, addFrames, exceptFields)
 
 f=fieldnames(data);
 for i=1:length(f)
-    temp=nanmax(data.(f{i}))>1;
-    if isempty(temp)
-        continue
-    end
-    if length(data.(f{i}))==n && temp && ~ismember(f{i},exceptFields)
+    if length(data.(f{i}))==n && nanmax(data.(f{i}))>1 && ~ismember(f{i},exceptFields)
         data.(f{i})=data.(f{i})+addFrames;
     end
 end

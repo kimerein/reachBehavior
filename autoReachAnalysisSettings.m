@@ -26,7 +26,7 @@ settings.isOrchestra=0; % if running this code on Harvard O2 server, set this to
 % For getReaches.m
 settings.reach.userDefinedThresh=1; % set to 1 if want user to manually define threshold for reach, instead of automated method
 if doManual==true
-    settings.reach.userDefinedThresh=1; 
+    settings.reach.userDefinedThresh=1;
 end
 settings.reach.maxReachFrequency=6; % in Hz, the maximum frequency at which mouse can reach
 settings.reach.reachThresh=5; % after non-parametric Z score transformation of reachData, threshold for determining mouse reach
@@ -56,13 +56,8 @@ if ~isempty(chronPath)
 end
 % settings.chew.chewFrequency=[4 6]; % frequency range at which mouse chews in Hz
 settings.chew.chewFrequency=[5.5 7.7]; % frequency range at which mouse chews in Hz
-<<<<<<< HEAD
-% settings.chew.chewingThresh=5; % in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
-settings.chew.chewingThresh=1.5; % for lick expt: in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
-=======
 settings.chew.chewingThresh=1; % in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
 % settings.chew.chewingThresh=0.9; % for lick expt: in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
->>>>>>> origin/master
 % settings.chew.tapers=[10 12]; % Chronux mtspecgramc tapers to use for identifying chewing at chewFrequency
 settings.chew.tapers=[5 7]; % Chronux mtspecgramc tapers to use for identifying chewing at chewFrequency
 settings.chew.fpass=[2 15]; % in Hz, the range for Chronux mtspecgramc
@@ -73,13 +68,13 @@ settings.chew.chewingWindow=[5 0.25]; % in seconds, first element: window for Ch
 settings.chew.plotOutput=1; % if 1, plot output, else do not plot
 settings.chew.minTimeToChewPellet=6; % in seconds, the minimum time it takes mouse to eat pellet (e.g., vs chewing Ensure)
 settings.chew.withinXSeconds=20; % must be at least minTimeToChewPellet seconds of chewing withinXSeconds for bout to be classified as chewing pellet
-settings.chew.dropIfChewingBefore=1; % if 1, will classify a reach as a drop, instead of a success, 
+settings.chew.dropIfChewingBefore=1; % if 1, will classify a reach as a drop, instead of a success,
 % if mouse was chewing prior to reach (i.e., still consuming previous pellet) within priorToReach_chewWindow seconds
 % AND chew time following reach is less than minTimeToChew_afterReach
-settings.chew.minTimeToChew_afterReach=18; % in seconds, a more stringent criterion for pellet consumption time, to disambiguate 
+settings.chew.minTimeToChew_afterReach=18; % in seconds, a more stringent criterion for pellet consumption time, to disambiguate
 % continued chewing of previous pellet after failed reach from successful reach
 settings.chew.priorToReach_chewWindow=4; % in seconds, window prior to reach to check for chewing
-                                  
+
 % Check whether chewing is actually grooming?
 settings.checkForGrooming=0; % 1 if want user to do this check, 0 otherwise
 settings.removeGroomingFromEating=0; % 1 if want grooming stretches to be removed as eating stretches, 0 otherwise
@@ -88,11 +83,11 @@ settings.removeGroomingFromEating=0; % 1 if want grooming stretches to be remove
 % settings.paw.pawAtMouthThresh=5; % in non-parametric Z score metrics, intensity threshold for determining when paw is raised to mouth
 settings.paw.pawAtMouthThresh=1.5; % for lick expt: in non-parametric Z score metrics, intensity threshold for determining when paw is raised to mouth
 settings.paw.maxPawAtMouthFreq=5; % in Hz, the maximum frequency at which mouse can repeatedly raise paw to mouth
-settings.paw.plotOutput=1; % if 1, plot output, else do not plot 
+settings.paw.plotOutput=1; % if 1, plot output, else do not plot
 
 % For getFidget.m
 settings.fidget.perchThresh=2; % after non-parametric transformation of perchData
-settings.fidget.plotOutput=1; % if 1, plot output, else do not plot 
+settings.fidget.plotOutput=1; % if 1, plot output, else do not plot
 
 % For codeEvents.m
 settings.pelletSettledForTime=0.066; % time in seconds for pellet to be at proper reach position, before reach begins

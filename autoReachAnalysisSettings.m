@@ -34,7 +34,7 @@ settings.chew.added_path='/Users/kim/Documents/MATLAB/chronux_2_11'; % path to C
 % settings.chew.chewFrequency=[4 6]; % frequency range at which mouse chews in Hz
 settings.chew.chewFrequency=[5.5 7.7]; % frequency range at which mouse chews in Hz
 % settings.chew.chewingThresh=5; % in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
-settings.chew.chewingThresh=0.9; % for lick expt: in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
+settings.chew.chewingThresh=1.5; % for lick expt: in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
 % settings.chew.tapers=[10 12]; % Chronux mtspecgramc tapers to use for identifying chewing at chewFrequency
 settings.chew.tapers=[5 7]; % Chronux mtspecgramc tapers to use for identifying chewing at chewFrequency
 settings.chew.fpass=[2 15]; % in Hz, the range for Chronux mtspecgramc
@@ -47,8 +47,8 @@ settings.chew.minTimeToChewPellet=6; % in seconds, the minimum time it takes mou
 settings.chew.withinXSeconds=20; % must be at least minTimeToChewPellet seconds of chewing withinXSeconds for bout to be classified as chewing pellet
                                   
 % Check whether chewing is actually grooming?
-settings.checkForGrooming=1; % 1 if want user to do this check, 0 otherwise
-settings.removeGroomingFromEating=1; % 1 if want grooming stretches to be removed as eating stretches, 0 otherwise
+settings.checkForGrooming=0; % 1 if want user to do this check, 0 otherwise
+settings.removeGroomingFromEating=0; % 1 if want grooming stretches to be removed as eating stretches, 0 otherwise
 
 % For pawAtMouth.m
 % settings.paw.pawAtMouthThresh=5; % in non-parametric Z score metrics, intensity threshold for determining when paw is raised to mouth

@@ -2,10 +2,7 @@ function settings=autoReachAnalysisSettings(varargin)
 
 % user-set constants
 
-persistent discardFirstNFrames
-
-doManual=false;
-chronPath=[];
+persistent discardFirstNFrames chewThresh chronPath doManual
 
 if ~isempty(varargin)
     discardFirstNFrames=varargin{1}; % number of frames to discard at beginning of movie
@@ -13,6 +10,9 @@ if ~isempty(varargin)
         doManual=varargin{2};
         if length(varargin)>2
             chronPath=varargin{3};
+            if length(varargin)>3
+                chewThresh=varargin{4};
+            end
         end
     end
 end
@@ -25,8 +25,10 @@ settings.isOrchestra=0; % if running this code on Harvard O2 server, set this to
 
 % For getReaches.m
 settings.reach.userDefinedThresh=1; % set to 1 if want user to manually define threshold for reach, instead of automated method
-if doManual==true
-    settings.reach.userDefinedThresh=1; 
+if exist('doManual','var')
+    if doManual==true
+        settings.reach.userDefinedThresh=1; 
+    end
 end
 settings.reach.maxReachFrequency=6; % in Hz, the maximum frequency at which mouse can reach
 settings.reach.reachThresh=5; % after non-parametric Z score transformation of reachData, threshold for determining mouse reach
@@ -41,8 +43,10 @@ settings.lick.plotOutput=1; % if 1, plot output of reach analysis, else do not p
 
 % For getPelletInPlace.m
 settings.pellet.userDefinedThresh=1; % set to 1 if want user to manually define threshold for pellet present, instead of automated method
-if doManual==true
-    settings.pellet.userDefinedThresh=1;
+if exist('doManual','var')
+    if doManual==true
+        settings.pellet.userDefinedThresh=1;
+    end
 end
 settings.pellet.subtractReachZone=0; % set to 1 if mouse tends to leave paw on wheel in pellet zone
 % settings.pellet.nScaledMAD=3; % how many scaled median absolute deviations away from median for data point to be called an outlier
@@ -51,12 +55,19 @@ settings.pellet.plotOutput=1; % if 1, plot output, else do not plot
 
 % For getChewing.m
 settings.chew.added_path='C:/Users/kim/Documents/MATLAB/chronux_2_11'; % path to Chronux
-if ~isempty(chronPath)
-    settings.chew.added_path=chronPath;
+if exist('chronPath','var')
+    if ~isempty(chronPath)
+        settings.chew.added_path=chronPath;
+    end
 end
 % settings.chew.chewFrequency=[4 6]; % frequency range at which mouse chews in Hz
 settings.chew.chewFrequency=[5.5 7.7]; % frequency range at which mouse chews in Hz
 settings.chew.chewingThresh=1; % in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
+if exist('chewThresh','var')
+    if ~isempty(chewThresh)
+        settings.chew.chewingThresh=chewThresh;
+    end
+end
 % settings.chew.chewingThresh=0.9; % for lick expt: in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
 % settings.chew.tapers=[10 12]; % Chronux mtspecgramc tapers to use for identifying chewing at chewFrequency
 settings.chew.tapers=[5 7]; % Chronux mtspecgramc tapers to use for identifying chewing at chewFrequency

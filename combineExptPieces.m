@@ -1,6 +1,12 @@
-function [alltbt,allmetadata]=combineExptPieces(expt_dir,useAsCue,cueDuration,doRealign)
+function [alltbt,allmetadata]=combineExptPieces(expt_dir,useAsCue,cueDuration,doRealign,settings)
 
 % cueDuration in seconds
+
+% settings.discardPreemptive
+% settings.check_for_human
+
+alltbt=[];
+allmetadata=[];
 
 % Only add in data that definitely has these fields
 tryForFields={'pelletPresent'};
@@ -12,12 +18,18 @@ for i=1:length(tryForFiles)
 end
 
 % Check for text file "humanchecked"
-check_for_human=1; % if this is 1
+check_for_human=settings.check_for_human; % if this is 1
 
 % Convert consecutive reaches to reach batches
 convert_to_batches=1; % if this is 1
 
-ls=dir(expt_dir);
+backupExptDir=expt_dir;
+if ~iscell(backupExptDir)
+    ls=dir(backupExptDir);
+    oneLoc=1;
+else
+    oneLoc=length(expt_dir);
+end
 j=1;
 tbt=[];
 alltbt=[];
@@ -28,14 +40,20 @@ prevname=[];
 mouseid_w_name=[];
 k=0;
 l=1;
+for z=1:oneLoc
+    expt_dir=backupExptDir{z};
+    if ~isempty(regexp(expt_dir,'processed_data'))
+        firk=regexp(expt_dir,'\');
+        expt_dir=expt_dir(1:firk(end)-1);
+    end
+    ls=dir(expt_dir);
 for i=1:length(ls)
     thisname=ls(i).name;
     thisisdir=ls(i).isdir;
     if ~isempty(regexp(thisname,'processed_data')) && thisisdir==1
         
         if check_for_human==1
-%             if exist([expt_dir '\' thisname '\humanchecked_afterResampleFix.txt'], 'file')==2
-            if exist([expt_dir '\' thisname '\humanchecked.txt'], 'file')==2 | exist([expt_dir '\' thisname '\humanchecked_afterResampleFix.txt'], 'file')==2
+            if exist([expt_dir '\' thisname '\humanchecked.txt'], 'file')==2 || exist([expt_dir '\' thisname '\humanchecked_afterResampleFix.txt'], 'file')==2
             else
                 disp(['Not including ' expt_dir '\' thisname]);
                 continue
@@ -72,8 +90,12 @@ for i=1:length(ls)
             end
         end
         
-        if tryFilesOut.preemptCue==true
+        if isnan(tryFilesOut.preemptCue(j))
+        elseif isempty(settings.discardPreemptive) || isempty(tryFilesOut.preemptCue(j))
             continue
+        elseif settings.discardPreemptive==true && tryFilesOut.preemptCue(j)==true
+            continue
+        else
         end
         
         
@@ -118,7 +140,7 @@ for i=1:length(ls)
                 end
             end
         end
-        
+            
         all_prev_names{l}=thisname;
         mouseid_w_name(l)=mouseid(j);
         sessid_w_name(l)=sessid(j);
@@ -128,6 +150,7 @@ for i=1:length(ls)
         sess_datetime{j}=thisname(1:r-2);
         j=j+1;
     end
+end
 end
 
 metadata=cell(1,length(tbt));
@@ -239,6 +262,8 @@ alltbt.reachStarts_noPawOnWheel(alltbt.pawOnWheel>lowThresh)=0;
 
 % If optoThresh is specified, re-get opto on
 if isfield(allmetadata,'optoThresh')
+    alltbt.optoZone(isnan(allmetadata.optoThresh),:)=alltbt.optoOn(isnan(allmetadata.optoThresh),:);
+    allmetadata.optoThresh(isnan(allmetadata.optoThresh))=0.5;
     alltbt.optoOn=alltbt.optoZone>repmat(allmetadata.optoThresh,1,size(alltbt.optoZone,2));
 end
 

@@ -12,7 +12,7 @@ allmetadata=[];
 tryForFields={'pelletPresent'};
 
 % Also read in data from these files if they exist
-tryForFiles={'optoOnHere','nth_session','optoThresh','preemptCue'};
+tryForFiles=settings.tryForFiles; 
 for i=1:length(tryForFiles)
     tryFilesOut.(tryForFiles{i})=[];
 end
@@ -90,14 +90,13 @@ for i=1:length(ls)
             end
         end
         
-        if isnan(tryFilesOut.preemptCue(j))
-        elseif isempty(settings.discardPreemptive) || isempty(tryFilesOut.preemptCue(j))
-            continue
-        elseif settings.discardPreemptive==true && tryFilesOut.preemptCue(j)==true
-            continue
-        else
-        end
-        
+%         if isnan(tryFilesOut.preemptCue(j))
+%         elseif isempty(settings.discardPreemptive) || isempty(tryFilesOut.preemptCue(j))
+%             continue
+%         elseif settings.discardPreemptive==true && tryFilesOut.preemptCue(j)==true
+%             continue
+%         else
+%         end
         
         if l==1
             k=k+1;
@@ -260,8 +259,8 @@ settings=reachExpt_analysis_settings;
 lowThresh=settings.lowThresh;
 alltbt.reachStarts_noPawOnWheel(alltbt.pawOnWheel>lowThresh)=0;
 
-% If optoThresh is specified, re-get opto on
-if isfield(allmetadata,'optoThresh')
+% If optoThresh is specified and settings.useOptoZone is 1, re-get opto on
+if isfield(allmetadata,'optoThresh') && settings.useOptoZone==1
     alltbt.optoZone(isnan(allmetadata.optoThresh),:)=alltbt.optoOn(isnan(allmetadata.optoThresh),:);
     allmetadata.optoThresh(isnan(allmetadata.optoThresh))=0.5;
     alltbt.optoOn=alltbt.optoZone>repmat(allmetadata.optoThresh,1,size(alltbt.optoZone,2));
@@ -356,9 +355,11 @@ for i=1:length(f)
 end
             
 % check alignment
-figure(); 
-plot(realign_tbt.(useAsCue)');
-title('Re-aligned cues');
+if settings.isOrchestra==0
+    figure(); 
+    plot(realign_tbt.(useAsCue)');
+    title('Re-aligned cues');
+end
 
 % Make cue uniform across trials, now that aligned
 av=nanmean(realign_tbt.(useAsCue),1);
@@ -366,9 +367,11 @@ ma=max(av);
 av(av<ma)=0;
 realign_tbt.(useAsCue)=repmat(av,size(realign_tbt.(useAsCue),1),1);
 
-figure();
-plot(realign_check');
-title('Re-aligned cue zone');
+if settings.isOrchestra==0
+    figure();
+    plot(realign_check');
+    title('Re-aligned cue zone');
+end
 end
 
 

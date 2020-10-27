@@ -31,6 +31,10 @@ for i=1:length(f)
     zoneVals.(f{i})=temp(settings.discardFirstNFrames+1:end);
 end
 
+% Check for unusual correlations between zones -- could indicate a problem
+% with the user-entered zones
+% The zones should be independent
+
 % Get reach data
 reaches=getReaches(zoneVals.reachZone);
 

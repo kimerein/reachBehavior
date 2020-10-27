@@ -62,7 +62,7 @@ if exist('chronPath','var')
 end
 % settings.chew.chewFrequency=[4 6]; % frequency range at which mouse chews in Hz
 settings.chew.chewFrequency=[5.5 7.7]; % frequency range at which mouse chews in Hz
-settings.chew.chewingThresh=1; % in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
+settings.chew.chewingThresh=1.2; % in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
 if exist('chewThresh','var')
     if ~isempty(chewThresh)
         settings.chew.chewingThresh=chewThresh;

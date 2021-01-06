@@ -23,13 +23,6 @@ check_for_human=settings.check_for_human; % if this is 1
 % Convert consecutive reaches to reach batches
 convert_to_batches=1; % if this is 1
 
-backupExptDir=expt_dir;
-if ~iscell(backupExptDir)
-    ls=dir(backupExptDir);
-    oneLoc=1;
-else
-    oneLoc=length(expt_dir);
-end
 j=1;
 tbt=[];
 alltbt=[];
@@ -40,22 +33,16 @@ prevname=[];
 mouseid_w_name=[];
 k=0;
 l=1;
-for z=1:oneLoc
-    expt_dir=backupExptDir{z};
-    if ~isempty(regexp(expt_dir,'processed_data'))
-        firk=regexp(expt_dir,'\');
-        expt_dir=expt_dir(1:firk(end)-1);
-    end
-    ls=dir(expt_dir);
-for i=1:length(ls)
-    thisname=ls(i).name;
-    thisisdir=ls(i).isdir;
+
+for i=1:length(expt_dir)
+    thisname=expt_dir{i};
+    thisisdir=1;
     if ~isempty(regexp(thisname,'processed_data')) && thisisdir==1
         
         if check_for_human==1
-            if exist([expt_dir '\' thisname '\humanchecked.txt'], 'file')==2 || exist([expt_dir '\' thisname '\humanchecked_afterResampleFix.txt'], 'file')==2
+            if exist([thisname '\humanchecked.txt'], 'file')==2 || exist([thisname '\humanchecked_afterResampleFix.txt'], 'file')==2
             else
-                disp(['Not including ' expt_dir '\' thisname]);
+                disp(['Not including ' thisname]);
                 continue
             end
         end
@@ -63,12 +50,12 @@ for i=1:length(ls)
         disp(thisname);
         
 %         a=load([expt_dir '\' thisname '\tbt_resampled.mat']);
-        a=load([expt_dir '\' thisname '\tbt.mat']);
+        a=load([thisname '\tbt.mat']);
         tbt{j}=a.tbt;
-        if exist([expt_dir '\' thisname '\mouse_id.mat'], 'file')==2
-            a=load([expt_dir '\' thisname '\mouse_id.mat']);
+        if exist([thisname '\mouse_id.mat'], 'file')==2
+            a=load([thisname '\mouse_id.mat']);
             if isempty(a.mouse_id)
-                disp(['Not including ' expt_dir '\' thisname]);
+                disp(['Not including ' thisname]);
                 continue 
             end
             mouseid(j)=a.mouse_id;
@@ -78,8 +65,8 @@ for i=1:length(ls)
         
         for tryCount=1:length(tryForFiles)
             currTryFile=tryForFiles{tryCount};
-            if exist([expt_dir '\' thisname '\' currTryFile '.mat'], 'file')==2
-                a=load([expt_dir '\' thisname '\' currTryFile '.mat']);
+            if exist([thisname '\' currTryFile '.mat'], 'file')==2
+                a=load([thisname '\' currTryFile '.mat']);
                 temp=tryFilesOut.(currTryFile);
                 temp(j)=a.(currTryFile);
                 tryFilesOut.(currTryFile)=temp;
@@ -135,7 +122,7 @@ for i=1:length(ls)
             else
                 sessid(j)=prevsessnumber;
                 if isnan(prevsessnumber)
-                    disp([expt_dir '\' thisname ' sessids are nan']);
+                    disp([thisname ' sessids are nan']);
                 end
             end
         end
@@ -146,10 +133,10 @@ for i=1:length(ls)
         l=l+1;
         
         r=regexp(thisname,'C');
-        sess_datetime{j}=thisname(1:r-2);
+        r2=regexp(thisname,'\');
+        sess_datetime{j}=thisname(r2(end)+1:r(end)-2);
         j=j+1;
     end
-end
 end
 
 metadata=cell(1,length(tbt));
@@ -239,7 +226,7 @@ for i=1:length(tbt)
 end
 
 if doRealign==1
-    alltbt=realignToCue_usingCueZone(alltbt,useAsCue,cueDuration);
+    alltbt=realignToCue_usingCueZone(alltbt,useAsCue,cueDuration,settings);
 end
 
 % % Set all reaches to 1's
@@ -255,7 +242,7 @@ for i=1:length(f)
 end
 
 alltbt.reachStarts_noPawOnWheel=alltbt.reachStarts;
-settings=reachExpt_analysis_settings;
+% settings=reachExpt_analysis_settings;
 lowThresh=settings.lowThresh;
 alltbt.reachStarts_noPawOnWheel(alltbt.pawOnWheel>lowThresh)=0;
 
@@ -278,9 +265,8 @@ end
 end
 
 
-function realign_tbt=realignToCue_usingCueZone(tbt,useAsCue,cueDuration)
+function realign_tbt=realignToCue_usingCueZone(tbt,useAsCue,cueDuration,settings)
 
-settings=reachExpt_analysis_settings;
 lowThresh=settings.lowThresh;
 
 % was each cue detection at the beginning or end of cue?

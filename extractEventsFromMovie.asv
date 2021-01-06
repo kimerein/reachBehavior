@@ -53,24 +53,10 @@ if settings.fixUnderpoweredDVR==true
     title('Fixed reach zone');
     
     % Filter LED zone to get rid of low-frequency noise at approx. 0.2 Hz
-    temp=isnan(zoneVals.LEDZone);
-    zoneVals.LEDZone(temp)=0;
-    zoneVals.LEDZone=bandPassLFP(zoneVals.LEDZone,30,0.3,10000,0)';
-    zoneVals.LEDZone(temp)=nan;
-    zoneVals.LEDZone=zoneVals.LEDZone';
+    zoneVals.LEDZone=bandPassLFP(zoneVals.LEDZone,30,0.3,10000,0);
     figure();
     plot(zoneVals.LEDZone);
     title('Fixed LED zone');
-    
-    % Filter cue zone to get rid of low-frequency noise at approx. 0.2 Hz
-    temp=isnan(zoneVals.cueZone);
-    zoneVals.cueZone(temp)=0;
-    zoneVals.cueZone=bandPassLFP(zoneVals.cueZone,30,0.3,10000,0)';
-    zoneVals.cueZone(temp)=nan;
-    zoneVals.cueZone=zoneVals.cueZone';
-    figure();
-    plot(zoneVals.cueZone,'Color','b');
-    title('Fixed cue zone');
 end
 
 % Get reach data

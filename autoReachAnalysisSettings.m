@@ -22,7 +22,7 @@ settings.movie_fps=30; % movie frame rate in frames per second
 settings.saveZoneData=1; % if 1, save zone data extracted from movie
 settings.discardFirstNFrames=discardFirstNFrames; % number of frames to discard at beginning of movie
 settings.isOrchestra=0; % if running this code on Harvard O2 server, set this to 1, else 0
-settings.fixUnderpoweredDVR=true; % had a problem with the power supply to DVR for a few days, produced noise in video that needs to be corrected
+settings.fixUnderpoweredDVR=false; % had a problem with the power supply to DVR for a few days, produced noise in video that needs to be corrected
 
 % For getReaches.m
 settings.reach.userDefinedThresh=1; % set to 1 if want user to manually define threshold for reach, instead of automated method
@@ -63,7 +63,7 @@ if exist('chronPath','var')
 end
 % settings.chew.chewFrequency=[4 6]; % frequency range at which mouse chews in Hz
 settings.chew.chewFrequency=[5.5 7.7]; % frequency range at which mouse chews in Hz
-settings.chew.chewingThresh=1.2; % in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
+settings.chew.chewingThresh=1; % in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
 if exist('chewThresh','var')
     if ~isempty(chewThresh)
         settings.chew.chewingThresh=chewThresh;

@@ -83,7 +83,7 @@ settings.chew.withinXSeconds=20; % must be at least minTimeToChewPellet seconds 
 settings.chew.dropIfChewingBefore=1; % if 1, will classify a reach as a drop, instead of a success, 
 % if mouse was chewing prior to reach (i.e., still consuming previous pellet) within priorToReach_chewWindow seconds
 % AND chew time following reach is less than minTimeToChew_afterReach
-settings.chew.minTimeToChew_afterReach=18; % in seconds, a more stringent criterion for pellet consumption time, to disambiguate 
+settings.chew.minTimeToChew_afterReach=6; % in seconds, a more stringent criterion for pellet consumption time, to disambiguate 
 % continued chewing of previous pellet after failed reach from successful reach
 settings.chew.priorToReach_chewWindow=4; % in seconds, window prior to reach to check for chewing
                                   

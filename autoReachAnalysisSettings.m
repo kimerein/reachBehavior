@@ -55,7 +55,7 @@ settings.pellet.nScaledMAD=1.75; % how many scaled median absolute deviations aw
 settings.pellet.plotOutput=1; % if 1, plot output, else do not plot
 
 % For getChewing.m
-settings.chew.added_path='C:\Users\sabatini\Documents\MATLAB\chronux_2_11'; % path to Chronux
+settings.chew.added_path='C:\Users\Kimberly\Documents\GitHub\chronux_2_11'; % path to Chronux
 if exist('chronPath','var')
     if ~isempty(chronPath)
         settings.chew.added_path=chronPath;

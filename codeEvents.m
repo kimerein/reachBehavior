@@ -142,8 +142,8 @@ for i=1:length(reachInds)
         if fidget.isFidgeting(j)==0
             break
         end
-    end
-    reachFidgetBegins(i)=j;    
+        reachFidgetBegins(i)=j;   
+    end  
 end
     
 out.reachTypes=reachTypes;

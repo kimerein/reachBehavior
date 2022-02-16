@@ -78,7 +78,8 @@ settings.chew.fpass=[2 15]; % in Hz, the range for Chronux mtspecgramc
 settings.chew.chewingWindow=[5 0.25]; % in seconds, first element: window for Chronux mtspecgramc to use to calculate power at chewing frequency
                                    % in seconds, second element: step for Chronux mtspecgramc to use to slide window across data
 settings.chew.plotOutput=1; % if 1, plot output, else do not plot
-settings.chew.minTimeToChewPellet=6; % in seconds, the minimum time it takes mouse to eat pellet (e.g., vs chewing Ensure)
+% settings.chew.minTimeToChewPellet=6; % in seconds, the minimum time it takes mouse to eat pellet (e.g., vs chewing Ensure)
+settings.chew.minTimeToChewPellet=3;
 settings.chew.withinXSeconds=20; % must be at least minTimeToChewPellet seconds of chewing withinXSeconds for bout to be classified as chewing pellet
 settings.chew.dropIfChewingBefore=1; % if 1, will classify a reach as a drop, instead of a success, 
 % if mouse was chewing prior to reach (i.e., still consuming previous pellet) within priorToReach_chewWindow seconds

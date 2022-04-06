@@ -25,7 +25,7 @@ else
     [outlier,med,scaledMAD]=isoutlier(pelletData,nScaledMAD);
     pelletPresent=zeros(size(pelletData));
     pelletPresent(isnan(pelletData))=nan;
-    pelletPresent(outlier==true)=1;
+    pelletPresent(outlier==true & pelletData>median(pelletData,2,'omitnan'))=1;
 end
 out.pelletPresent=pelletPresent;
 

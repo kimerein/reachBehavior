@@ -22,8 +22,7 @@ settings.movie_fps=30; % movie frame rate in frames per second
 settings.saveZoneData=1; % if 1, save zone data extracted from movie
 settings.discardFirstNFrames=discardFirstNFrames; % number of frames to discard at beginning of movie
 settings.isOrchestra=0; % if running this code on Harvard O2 server, set this to 1, else 0
-settings.fixUnderpoweredDVR=true; % had a problem with the power supply to DVR for a few days, produced noise in video that needs to be corrected
-settings.flipReachZone=true;
+settings.fixUnderpoweredDVR=false; % had a problem with the power supply to DVR for a few days, produced noise in video that needs to be corrected
 
 % For getReaches.m
 settings.reach.userDefinedThresh=1; % set to 1 if want user to manually define threshold for reach, instead of automated method

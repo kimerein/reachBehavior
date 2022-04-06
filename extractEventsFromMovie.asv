@@ -63,20 +63,19 @@ if settings.fixUnderpoweredDVR==true
 %     plot(zoneVals.optoZone-nanmin(zoneVals.optoZone),'Color','r');
 %     legend({'reach zone','opto zone'});
 %     title('Correcting noise in video');
+%     figure();
 %     zoneVals.reachZone=zoneVals.reachZone-nanmin(zoneVals.reachZone)-scaleFac*(zoneVals.optoZone-nanmin(zoneVals.optoZone));
 
     if settings.flipReachZone==true
         zoneVals.reachZone=-zoneVals.reachZone;
     end
     temp=isnan(zoneVals.reachZone);
-    toTransform=zoneVals.reachZone;
-    toTransform(temp)=0;
-    toTransform=bandPassLFP(toTransform,30,0.1,0.3,0)';
-    toTransform(temp)=nan;
-    toTransform=toTransform';
+    temp(temp)=0;
+    temp=bandPassLFP(temp,30,0.1,0.3,0)';
+    temp(temp)=nan;
+    temp=temp';
     backup=zoneVals.reachZone;
-    zoneVals.reachZone=(backup-median(backup,2,'omitnan'))-toTransform;
-    zoneVals.reachZone(find(~isnan(zoneVals.reachZone),1,'last')-100:find(~isnan(zoneVals.reachZone),1,'last'))=median(zoneVals.reachZone,2,'omitnan');
+    zoneVals.reachZone=(backup-median(backup,2,'omitnan'))-temp;
     figure();
     plot(zoneVals.reachZone,'Color','k');
     title('Fixed reach zone');
@@ -87,7 +86,6 @@ if settings.fixUnderpoweredDVR==true
     zoneVals.LEDZone=bandPassLFP(zoneVals.LEDZone,30,0.3,10000,0)';
     zoneVals.LEDZone(temp)=nan;
     zoneVals.LEDZone=zoneVals.LEDZone';
-    zoneVals.LEDZone(find(~isnan(zoneVals.LEDZone),1,'last')-100:find(~isnan(zoneVals.LEDZone),1,'last'))=median(zoneVals.LEDZone,2,'omitnan');
     figure();
     plot(zoneVals.LEDZone);
     title('Fixed LED zone');
@@ -98,7 +96,6 @@ if settings.fixUnderpoweredDVR==true
     zoneVals.cueZone=bandPassLFP(zoneVals.cueZone,30,0.3,10000,0)';
     zoneVals.cueZone(temp)=nan;
     zoneVals.cueZone=zoneVals.cueZone';
-    zoneVals.cueZone(find(~isnan(zoneVals.cueZone),1,'last')-100:find(~isnan(zoneVals.cueZone),1,'last'))=median(zoneVals.cueZone,2,'omitnan');
     figure();
     plot(zoneVals.cueZone,'Color','b');
     title('Fixed cue zone');

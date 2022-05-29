@@ -76,6 +76,8 @@ if settings.fixUnderpoweredDVR==true
     toTransform=toTransform';
     backup=zoneVals.reachZone;
     zoneVals.reachZone=(backup-median(backup,2,'omitnan'))-toTransform;
+    zoneVals.reachZone(isnan(zoneVals.reachZone))=0;
+    zoneVals.reachZone=bandPassLFP(zoneVals.reachZone,30,1,10000,0);
     zoneVals.reachZone(find(~isnan(zoneVals.reachZone),1,'last')-100:find(~isnan(zoneVals.reachZone),1,'last'))=median(zoneVals.reachZone,2,'omitnan');
     figure();
     plot(zoneVals.reachZone,'Color','k');

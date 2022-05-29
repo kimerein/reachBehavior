@@ -17,14 +17,17 @@ movieFramePeriod=1/movie_fps; % in seconds
 minIndsBetweenReach=floor(minReachPeriod/movieFramePeriod);
 
 if userDefine==1
+    if settings.reach.doZscoreBeforeManual==true
+        reachData=nonparamZscore(reachData); % non-parametric Z score
+    end
     figure(); 
     plot(reachData);
     title('Raw reach data');
     reachThresh=input('Enter threshold for reach detection. Values above this threshold will be considered a reach. ');
 else
-    isAboveMed=reachData>median(reachData,2,'omitnan');
+%     isAboveMed=reachData>median(reachData,2,'omitnan');
     reachData=nonparamZscore(reachData); % non-parametric Z score
-    reachData(~isAboveMed)=0;
+%     reachData(~isAboveMed)=0;
 end
 isReach=reachData>reachThresh;
 

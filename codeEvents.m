@@ -86,12 +86,22 @@ for i=1:length(reachInds)
     
     % Does mouse move the pellet? i.e., grab or miss
     % Is pellet gone at the end of the reach?
-    if pelletInPlace.pelletPresent(reachEnds(i)+1)==1
-        % mouse did not move pellet, so miss
-        reachTypes(i)=missType;
+    if reachEnds(i)+10>length(pelletInPlace.pelletPresent)
+        if all(pelletInPlace.pelletPresent(reachEnds(i)+1:end)>0.5)
+            % mouse did not move pellet, so miss
+            reachTypes(i)=missType;
+        else
+            % mouse did move pellet, so grab
+            reachTypes(i)=grabType;
+        end
     else
-        % mouse did move pellet, so grab
-        reachTypes(i)=grabType;
+        if all(pelletInPlace.pelletPresent(reachEnds(i)+1:reachEnds(i)+10)>0.5)
+            % mouse did not move pellet, so miss
+            reachTypes(i)=missType;
+        else
+            % mouse did move pellet, so grab
+            reachTypes(i)=grabType;
+        end
     end
     
     % Did mouse raise paw to mouth?

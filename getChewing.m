@@ -21,7 +21,10 @@ params.fpass=settings.chew.fpass; % in Hz
 
 [S,t,f]=mtspecgramc(eatData(~isnan(eatData)),chewingWindow,params);
 chewingpower=nanmean(S(:,f>=chewFrequency(1) & f<=chewFrequency(2)),2);
-chewingpower=nonparamZscore(chewingpower);
+
+isAboveMed=chewingpower>median(chewingpower,1,'omitnan');
+chewingpower=nonparamZscore(chewingpower); % non-parametric Z score
+chewingpower(~isAboveMed)=0;
 
 frameTimes=0:(1/movie_fps):(length(eatData(~isnan(eatData)))-1)*(1/movie_fps);
 chewingInFrames=mapToFrames(chewingpower,t,frameTimes);

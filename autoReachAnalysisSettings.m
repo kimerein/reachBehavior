@@ -22,8 +22,8 @@ settings.movie_fps=30; % movie frame rate in frames per second
 settings.saveZoneData=1; % if 1, save zone data extracted from movie
 settings.discardFirstNFrames=discardFirstNFrames; % number of frames to discard at beginning of movie
 settings.isOrchestra=0; % if running this code on Harvard O2 server, set this to 1, else 0
-settings.fixUnderpoweredDVR=true; % had a problem with the power supply to DVR for a few days, produced noise in video that needs to be corrected
-settings.flipReachZone=true;
+settings.fixUnderpoweredDVR=false; % had a problem with the power supply to DVR for a few days, produced noise in video that needs to be corrected
+settings.flipReachZone=false;
 
 % For getReaches.m
 settings.reach.userDefinedThresh=1; % set to 1 if want user to manually define threshold for reach, instead of automated method
@@ -32,8 +32,9 @@ if exist('doManual','var')
         settings.reach.userDefinedThresh=1; 
     end
 end
+settings.reach.doZscoreBeforeManual=true; % will Zscore raw reach data before asking user to set threshold
 settings.reach.maxReachFrequency=6; % in Hz, the maximum frequency at which mouse can reach
-settings.reach.reachThresh=5; % after non-parametric Z score transformation of reachData, threshold for determining mouse reach
+settings.reach.reachThresh=2.5; % after non-parametric Z score transformation of reachData, threshold for determining mouse reach
 settings.reach.holdThreshold=5; % in seconds -- if any reach lasts longer than 10 s, this is not a reach -- this is a hold
 settings.reach.plotOutput=1; % if 1, plot output of reach analysis, else do not plot
 
@@ -56,7 +57,7 @@ settings.pellet.nScaledMAD=1.75; % how many scaled median absolute deviations aw
 settings.pellet.plotOutput=1; % if 1, plot output, else do not plot
 
 % For getChewing.m
-settings.chew.added_path='C:\Users\Kimberly\Documents\GitHub\chronux_2_11'; % path to Chronux
+settings.chew.added_path='C:\Users\sabatini\Documents\GitHub\chronux_2_11'; % path to Chronux
 if exist('chronPath','var')
     if ~isempty(chronPath)
         settings.chew.added_path=chronPath;

@@ -22,8 +22,8 @@ settings.movie_fps=30; % movie frame rate in frames per second
 settings.saveZoneData=1; % if 1, save zone data extracted from movie
 settings.discardFirstNFrames=discardFirstNFrames; % number of frames to discard at beginning of movie
 settings.isOrchestra=0; % if running this code on Harvard O2 server, set this to 1, else 0
-settings.fixUnderpoweredDVR=true; % had a problem with the power supply to DVR for a few days, produced noise in video that needs to be corrected
-settings.flipReachZone=true;
+settings.fixUnderpoweredDVR=false; % had a problem with the power supply to DVR for a few days, produced noise in video that needs to be corrected
+settings.flipReachZone=false;
 
 % For getReaches.m
 settings.reach.userDefinedThresh=1; % set to 1 if want user to manually define threshold for reach, instead of automated method
@@ -36,6 +36,7 @@ settings.reach.maxReachFrequency=6; % in Hz, the maximum frequency at which mous
 settings.reach.reachThresh=5; % after non-parametric Z score transformation of reachData, threshold for determining mouse reach
 settings.reach.holdThreshold=5; % in seconds -- if any reach lasts longer than 10 s, this is not a reach -- this is a hold
 settings.reach.plotOutput=1; % if 1, plot output of reach analysis, else do not plot
+settings.reach.Zscore=true; % if 1, will Zscore before asking user to set reach threshold
 
 % For getLicks.m
 settings.lick.maxReachFrequency=20; % in Hz, the maximum frequency at which mouse can reach

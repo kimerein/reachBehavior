@@ -17,6 +17,9 @@ movieFramePeriod=1/movie_fps; % in seconds
 minIndsBetweenReach=floor(minReachPeriod/movieFramePeriod);
 
 if userDefine==1
+    if settings.reach.Zscore==true
+        reachData=nonparamZscore(reachData); % non-parametric Z score
+    end
     figure(); 
     plot(reachData);
     title('Raw reach data');

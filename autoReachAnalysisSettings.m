@@ -56,6 +56,7 @@ settings.pellet.subtractReachZone=0; % set to 1 if mouse tends to leave paw on w
 % settings.pellet.nScaledMAD=3; % how many scaled median absolute deviations away from median for data point to be called an outlier
 settings.pellet.nScaledMAD=1.75; % how many scaled median absolute deviations away from median for data point to be called an outlier
 settings.pellet.plotOutput=1; % if 1, plot output, else do not plot
+settings.pellet.pelletAboveFractionOfRange=0.75;
 
 % For getChewing.m
 settings.chew.added_path='C:\Users\sabatini\Documents\GitHub\chronux_2_11'; % path to Chronux

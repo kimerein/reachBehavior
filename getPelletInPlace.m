@@ -10,6 +10,7 @@ settings=autoReachAnalysisSettings();
 userDefine=settings.pellet.userDefinedThresh; % 1 if user manually defines threshold for pellet present, instead of automated method
 nScaledMAD=settings.pellet.nScaledMAD; % how many scaled median absolute deviations away from median for data point to be called an outlier
 plotOutput=settings.pellet.plotOutput; % if 1, plot output, else do not plot
+fractionOfRange=settings.pellet.pelletAboveFractionOfRange; % will also call all pellet zone values "pellet present" if above this fraction of range
 
 out.pelletPercRank=(tiedrank(pelletData)-1)./(length(pelletData)-1);
 
@@ -26,6 +27,9 @@ else
     pelletPresent=zeros(size(pelletData));
     pelletPresent(isnan(pelletData))=nan;
     pelletPresent(outlier==true & pelletData>median(pelletData,2,'omitnan'))=1;
+    % get pellet zone range
+    pe_ra=range(pelletData);
+    pelletPresent(pelletData>nanmin(pelletData)+fractionOfRange*pe_ra)=1;
 end
 out.pelletPresent=pelletPresent;
 

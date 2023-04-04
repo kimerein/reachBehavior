@@ -268,6 +268,7 @@ end
 function realign_tbt=realignToCue_usingCueZone(tbt,useAsCue,cueDuration,settings)
 
 lowThresh=settings.lowThresh;
+beginningOrEnd=false;
 
 % was each cue detection at the beginning or end of cue?
 cueDurationInds=floor(cueDuration/mode(diff(nanmean(tbt.times,1))));
@@ -295,14 +296,27 @@ for i=1:size(cue,1)
     else
         fi(i)=temp;
         % what does cue zone look like surrounding this point?
-        if temp-cueDurationInds<1 || temp+cueDurationInds>size(cueZone,2)
+        if temp-2*cueDurationInds<1 || temp+cueDurationInds>size(cueZone,2)
             continue
         end
-        if nanmean(cueZone(i,temp-cueDurationInds:temp))<nanmean(cueZone(i,temp:temp+cueDurationInds)) % this is beginning of cue
-            % leave alone
-        else % this is end of cue
-            fi(i)=temp-(cueDurationInds-2);
+
+        if beginningOrEnd==false
+            disp('Aligning all trials to cueZone onset');
+            % Actually realign to cue onset
+            % Use positive peak of derivative
+            d=diff(cueZone(i,temp-2*cueDurationInds:temp+cueDurationInds));
+            [~,maxie]=nanmax(d,[],2);
+            fi(i)=temp-2*cueDurationInds+maxie-1;
+        else
+            disp('realignToCue but just Is this beginning or end of cue');
+            % Just check if beginning or end of cue
+            if nanmean(cueZone(i,temp-cueDurationInds:temp))<nanmean(cueZone(i,temp:temp+cueDurationInds)) % this is beginning of cue
+                % leave alone
+            else % this is end of cue
+                fi(i)=temp-(cueDurationInds-2);
+            end
         end
+
         if fi(i)-cueDurationInds<1 || fi(i)+cueDurationInds>size(cueZone,2)
             continue
         end

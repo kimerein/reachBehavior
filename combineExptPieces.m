@@ -306,7 +306,7 @@ for i=1:size(cue,1)
             % Use positive peak of derivative
             d=diff(cueZone(i,temp-2*cueDurationInds:temp+cueDurationInds));
             [~,maxie]=nanmax(d,[],2);
-            fi(i)=temp-2*cueDurationInds+maxie-1;
+            fi(i)=temp-2*cueDurationInds+maxie;
         else
             disp('realignToCue but just Is this beginning or end of cue');
             % Just check if beginning or end of cue

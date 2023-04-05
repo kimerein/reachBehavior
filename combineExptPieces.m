@@ -275,6 +275,13 @@ cueDurationInds=floor(cueDuration/mode(diff(nanmean(tbt.times,1))));
 
 % line up cues
 
+% fix for cue stuck on
+cue=tbt.(useAsCue);
+findstuckon=all(cue>lowThresh,2);
+cue(findstuckon,:)=0;
+cue(findstuckon,:)=repmat(nanmean(cue,1),nansum(findstuckon),1);
+tbt.(useAsCue)=cue;
+
 % find first cue ind on
 cue=tbt.(useAsCue);
 [~,cueind]=max(nanmean(cue,1));

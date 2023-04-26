@@ -14,7 +14,11 @@ tryForFields={'pelletPresent'};
 % Also read in data from these files if they exist
 tryForFiles=settings.tryForFiles; 
 for i=1:length(tryForFiles)
-    tryFilesOut.(tryForFiles{i})=[];
+    if contains(tryForFiles{i},'dateFromTextFile')
+        tryFilesOut.(tryForFiles{i})=[datetime(0,0,0)];
+    else
+        tryFilesOut.(tryForFiles{i})=[];
+    end
 end
 
 % Check for text file "humanchecked"
@@ -134,7 +138,12 @@ for i=1:length(expt_dir)
         
         r=regexp(thisname,'C');
         r2=regexp(thisname,'\');
-        sess_datetime{j}=thisname(r2(end)+1:r(end)-2);
+        if isempty(r)
+            r=regexp(thisname,'processed_data');
+            sess_datetime{j}=thisname(r2(end)+5:r(end)-2);
+        else
+            sess_datetime{j}=thisname(r2(end)+1:r(end)-2);
+        end
         j=j+1;
     end
 end
@@ -145,7 +154,11 @@ for i=1:length(tbt)
     for j=1:length(tryForFiles)
         currTryFile=tryForFiles{j};
         temp=tryFilesOut.(currTryFile);
-        metadata{i}.(currTryFile)=temp(i).*ones(size(tbt{i}.times,1),1);
+        if isdatetime(temp)
+            metadata{i}.(currTryFile)=repmat(temp(i),size(tbt{i}.times,1),1);
+        else
+            metadata{i}.(currTryFile)=temp(i).*ones(size(tbt{i}.times,1),1);
+        end
     end
     metadata{i}.sessid=sessid(i).*ones(size(tbt{i}.times,1),1);
     metadata{i}.sess_datetime=cell(size(tbt{i}.times,1),1);
@@ -153,8 +166,11 @@ for i=1:length(tbt)
         metadata{i}.sess_datetime{j}=sess_datetime{i};
     end
     % Fix
-    if isempty(regexp(metadata{i}.sess_datetime{1},'2018'))
-        metadata{i}.sess_datetime=fixChineseDVRDatetime(metadata{i}.sess_datetime);
+    doDVRdatetimefix=false;
+    if doDVRdatetimefix==true
+        if isempty(regexp(metadata{i}.sess_datetime{1},'2018'))
+            metadata{i}.sess_datetime=fixChineseDVRDatetime(metadata{i}.sess_datetime);
+        end
     end
 end
 
@@ -297,7 +313,7 @@ realign_check=nan(size(cue,1),2*cueDurationInds+1);
 fi=nan(1,size(cue,1));
 for i=1:size(cue,1)
     temp=find(cue(i,:)>lowThresh,1,'first');
-    % if cue is missing from this trial, drop this trial
+    % if cue is missing from this trial, do not realign
     if isempty(temp)
         fi(i)=nan;
     else
@@ -312,7 +328,11 @@ for i=1:size(cue,1)
             % Actually realign to cue onset
             % Use positive peak of derivative
             d=diff(cueZone(i,temp-2*cueDurationInds:temp+cueDurationInds));
-            [~,maxie]=nanmax(d,[],2);
+            if all(d<0.0001) % do not know where onset is, cueZone not informative
+                maxie=2*cueDurationInds;
+            else
+                [~,maxie]=nanmax(d,[],2);
+            end
             fi(i)=temp-2*cueDurationInds+maxie;
         else
             disp('realignToCue but just Is this beginning or end of cue');
@@ -331,6 +351,10 @@ for i=1:size(cue,1)
     end
 end
 
+if ~isempty(settings.putCueAtInd)
+    cueind=settings.putCueAtInd;
+end
+
 % realign cue and rest of fields
 for i=1:length(f)
     currfield=tbt.(f{i});
@@ -342,9 +366,11 @@ for i=1:length(f)
     for j=1:size(cue,1)
         % realign each trial
         if isnan(fi(j))
+            % do not realign
+            temp=currfield(j,:);
             % exclude this trial
             % nan out
-            temp=nan(size(currfield(j,:)));
+            % temp=nan(size(currfield(j,:)));
         elseif fi(j)==cueind
             % already aligned
             temp=currfield(j,:);

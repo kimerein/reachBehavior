@@ -113,7 +113,12 @@ reaches=getReaches(zoneVals.reachZone);
 if settings.pellet.subtractReachZone==1
     zoneVals=subtractReachFromPelletZones(zoneVals);
 end
-pellets=getPelletInPlace(zoneVals.pelletZone);
+if settings.pellet.useNewPelletApproach==true
+    pellets.rawData=zoneVals.pelletZone;
+    pellets=pelletPresentByDerivZero(pellets,settings.pellet.zeroDerivRange,settings.isOrchestra);
+else
+    pellets=getPelletInPlace(zoneVals.pelletZone);
+end
 
 % Get chewing data
 eat=getChewing(zoneVals.eatZone);

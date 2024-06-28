@@ -57,6 +57,9 @@ settings.pellet.subtractReachZone=0; % set to 1 if mouse tends to leave paw on w
 settings.pellet.nScaledMAD=1.75; % how many scaled median absolute deviations away from median for data point to be called an outlier
 settings.pellet.plotOutput=1; % if 1, plot output, else do not plot
 settings.pellet.pelletAboveFractionOfRange=0.75;
+settings.pellet.useNewPelletApproach=true; % if want to use gaussian mixture model to detect pellet present, this is the newer approach
+settings.pellet.zeroDerivRange=[-1000 1000]; % this should be fairly consistent across videos acquired by same camera, assuming pellet size does not change
+% zeroDerivRange is range to call "zero" derivative in pellets.rawData
 
 % For getChewing.m
 settings.chew.added_path='C:\Users\sabatini\Documents\GitHub\chronux_2_11'; % path to Chronux
@@ -67,7 +70,7 @@ if exist('chronPath','var')
 end
 % settings.chew.chewFrequency=[4 6]; % frequency range at which mouse chews in Hz
 settings.chew.chewFrequency=[5.5 7.7]; % frequency range at which mouse chews in Hz
-settings.chew.chewingThresh=1; % in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
+settings.chew.chewingThresh=0.25; % in non-parametric Z score metrics, threshold for power in chewing frequency range above which mouse is chewing
 if exist('chewThresh','var')
     if ~isempty(chewThresh)
         settings.chew.chewingThresh=chewThresh;

@@ -257,7 +257,11 @@ for i=1:length(ITIs)
     % Find time when pellet wheel begins to turn
     curr=relevantEventLogTimes(relevantEventLog==pelletsWriteCode);
     if length(curr)>1 % Should have only presented pellet once
-        error('Why has pellet been presented more than once?');
+        %error('Why has pellet been presented more than once?');
+        % Fill in with expected time
+        curr=trialStartTimes(end)+settings.expectedTime.beginPelletWheel; % in ms
+        [~,mi]=min(abs(timesPerTrial-curr)); % Find closest time
+        pelletPresented(i,mi(1))=1; % Presented here
     else
         % Fix for bug in Arduino code -- see settings
         % Fixed bug on 12/8/2017
